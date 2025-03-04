@@ -10,6 +10,6 @@
         - Main Movie Trailer -> Movie and Description
         - Movie Suggestion Based on Categories -> In each category horizontally scrollable list of movies
 
--ZenGPT : 
+- ZenGPT : 
     - Search Bar
     - Movie Suggestions

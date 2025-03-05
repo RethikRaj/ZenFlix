@@ -1,10 +1,29 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import validateForm from "../utils/validateForm";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const usernameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   const toggleSignInAndSignUp = ()=>{
     setIsSignIn(!isSignIn);
+  }
+
+  const handleSubmission = ()=>{
+    // step 1 : Validate form data
+    let message = "";
+    if(isSignIn){
+      message = validateForm(emailRef.current.value, passwordRef.current.value);
+    }else{
+      message = validateForm(emailRef.current.value, passwordRef.current.value,usernameRef.current.value,);
+    }
+    setErrorMessage(message);
+
+    // Sign In / Sign Up
   }
 
   return (
@@ -16,12 +35,13 @@ const Login = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-black to-transparent z-10"></div>
       </div>
 
-      <form className="absolute z-20 bg-black/60 w-3/12 p-8 text-white">
+      <form onSubmit={(e)=>e.preventDefault()} className="absolute z-20 bg-black/60 w-3/12 p-8 text-white">
         <h1 className="mb-4 font-bold text-2xl">{isSignIn ? "Sign In" : "Sign Up"}</h1>
-        {!isSignIn && <input className="w-full my-4 text-gray-300 bg-gray-600 p-4 rounded-lg outline-none" type="text" placeholder="Full Name"/>}
-        <input className="w-full my-4 text-gray-300 bg-gray-600 p-4 rounded-lg outline-none" type="text" placeholder="Email or Phone Number"/>
-        <input className="w-full my-4 text-gray-300 bg-gray-600 p-4 rounded-lg outline-none" type="password" placeholder="Password"/>
-        <button className="bg-red-700 w-full my-2 p-4 rounded-lg">{isSignIn ? "Sign In" : "Sign Up"}</button>
+        {!isSignIn && <input ref={usernameRef} className="w-full my-4 text-gray-300 bg-gray-600 p-4 rounded-lg outline-none" type="text" placeholder="Full Name" />}
+        <input ref={emailRef} className="w-full my-4 text-gray-300 bg-gray-600 p-4 rounded-lg outline-none" type="text" placeholder="Email"/>
+        <input ref={passwordRef} className="w-full my-4 text-gray-300 bg-gray-600 p-4 rounded-lg outline-none" type="password" placeholder="Password"/>
+        <p className="text-red-700 text-lg font-bold">{errorMessage}</p>
+        <button className="bg-red-700 w-full my-2 p-4 rounded-lg cursor-pointer" onClick={handleSubmission}>{isSignIn ? "Sign In" : "Sign Up"}</button>
         <p className="m-2">{isSignIn ? "New To ZenFlix?" : "Already an User?"}<span className="hover:underline cursor-pointer" onClick={toggleSignInAndSignUp}>{isSignIn ? "Sign Up Now.":"Sign In Now."}</span></p>
 
       </form>

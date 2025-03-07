@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import validateForm from "../utils/validateForm";
+import {createUserWithEmailAndPassword , signInWithEmailAndPassword} from "firebase/auth";
+import {auth} from "../utils/firebase"
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -10,10 +12,11 @@ const Login = () => {
   const passwordRef = useRef();
 
   const toggleSignInAndSignUp = ()=>{
+    setErrorMessage("");
     setIsSignIn(!isSignIn);
   }
 
-  const handleSubmission = ()=>{
+  const handleSubmission = async ()=>{
     // step 1 : Validate form data
     let message = "";
     if(isSignIn){
@@ -23,7 +26,40 @@ const Login = () => {
     }
     setErrorMessage(message);
 
-    // Sign In / Sign Up
+    if(message !== null) return;
+
+    // Step 2 : If validation is succesful sign up or sign in that user.
+    // const auth = getAuth(); // this is used in every firebase api thus keep it in central place like firebase.js
+    if(!isSignIn){
+      // sign up logic
+      try{
+        const userCredential = await createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
+        const user = userCredential.user;
+        console.log(user);
+      }catch(error){
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode + " : " + errorMessage);
+      }
+      
+
+    }else{
+      // sign in logic
+      try{
+        const userCredential = await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
+        const user = userCredential.user;
+        console.log(user);
+      }catch(error){
+        const errorCode = error.code;
+        // const errorMessage = error.message;
+
+        if(errorCode === "auth/invalid-credential"){
+          setErrorMessage("Check your email id or password");
+        }
+      }
+
+    }
+    
   }
 
   return (

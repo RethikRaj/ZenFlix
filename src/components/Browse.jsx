@@ -10,7 +10,7 @@ const Browse = () => {
   useFetchAndUpdateMovies("top_rated",addTopRatedMovies);
 
   return (
-    <div>
+    <div className="bg-black">
       <MainMovieContainer/>
       <SecondaryMoviesContainer/>
     </div>

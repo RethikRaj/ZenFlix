@@ -6,7 +6,7 @@ const SecondaryMoviesContainer = () => {
 
 
   return (
-    <div className="px-4 bg-black ">
+    <div className="px-4 bg-black">
       {movies &&
         <div className="mx-8 -translate-y-55">
           <MovieCategory categoryTitle={"Now Playing"} categoryMovies={movies?.nowPlayingMovies}/>

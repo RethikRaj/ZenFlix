@@ -8,8 +8,14 @@ const Header = () => {
   const user = useSelector((store)=>store.user);
   const navigate = useNavigate();
   const handleSignOut = async ()=>{
-    await signOut(auth);
-    navigate("/");
+    try{
+      await signOut(auth);
+      navigate("/");
+    }catch(error){
+      console.log(error);
+      navigate("/error");
+    }
+    
   }
 
   return (

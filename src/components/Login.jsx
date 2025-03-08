@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
 import validateForm from "../utils/validateForm";
-import {createUserWithEmailAndPassword , signInWithEmailAndPassword} from "firebase/auth";
+import {createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth} from "../utils/firebase"
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -10,6 +13,9 @@ const Login = () => {
   const usernameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleSignInAndSignUp = ()=>{
     setErrorMessage("");
@@ -33,9 +39,18 @@ const Login = () => {
     if(!isSignIn){
       // sign up logic
       try{
-        const userCredential = await createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
-        const user = userCredential.user;
-        console.log(user);
+        await createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
+        // Step 3 : Update data of user in User Slice => But this i am not doing here instead i will use onAuthStateChanged API.
+        // Step 4 : Update displayname of user
+        await updateProfile(auth.currentUser,{displayName : usernameRef.current.value});
+        // Step 5 : Update data of user in User Slice => This must be done here only since onAuthStateChanged is not triggered .
+        const {uid, email, displayName} = auth.currentUser;
+        dispatch(addUser({
+          uid,
+          email,
+          displayName
+        }))
+        navigate("/browse");
       }catch(error){
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -46,13 +61,11 @@ const Login = () => {
     }else{
       // sign in logic
       try{
-        const userCredential = await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
-        const user = userCredential.user;
-        console.log(user);
+        await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
+        navigate("/browse");
       }catch(error){
         const errorCode = error.code;
         // const errorMessage = error.message;
-
         if(errorCode === "auth/invalid-credential"){
           setErrorMessage("Check your email id or password");
         }

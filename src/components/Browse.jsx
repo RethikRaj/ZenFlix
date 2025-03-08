@@ -1,11 +1,16 @@
-import useFetchNowPlayingMovies from "../hooks/useFetchNowPlayingMovies";
+import useFetchAndUpdateNowPlayingMovies from "../hooks/useFetchAndUpdateNowPlayingMovies";
+import MainMovieContainer from "./MainMovieContainer";
+import SecondaryMoviesContainer from "./SecondaryMoviesContainer";
 
 
 const Browse = () => {
-  useFetchNowPlayingMovies();
-  
+  useFetchAndUpdateNowPlayingMovies();
+
   return (
-    <div>Browse</div>
+    <div>
+      <MainMovieContainer/>
+      <SecondaryMoviesContainer/>
+    </div>
   )
 }
 

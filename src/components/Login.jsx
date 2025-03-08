@@ -4,7 +4,6 @@ import {createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfi
 import {auth} from "../utils/firebase"
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -15,7 +14,6 @@ const Login = () => {
   const passwordRef = useRef();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const toggleSignInAndSignUp = ()=>{
     setErrorMessage("");
@@ -50,7 +48,6 @@ const Login = () => {
           email,
           displayName
         }))
-        navigate("/browse");
       }catch(error){
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -62,7 +59,6 @@ const Login = () => {
       // sign in logic
       try{
         await signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value);
-        navigate("/browse");
       }catch(error){
         const errorCode = error.code;
         // const errorMessage = error.message;

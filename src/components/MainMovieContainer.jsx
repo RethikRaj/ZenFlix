@@ -1,23 +1,23 @@
-import { useSelector } from "react-redux"
-import MainVideoBackground from "./MainVideoBackground"
-import MainVideoTitle from "./MainVideoTitle"
+import { useSelector } from "react-redux";
+import MainVideoBackground from "./MainVideoBackground";
+import MainVideoTitle from "./MainVideoTitle";
 
 const MainMovieContainer = () => {
-	const movies = useSelector((store)=>store.movies.nowPlayingMovies);
-	
-	if(!movies) return;
+  const movies = useSelector((store) => store.movies?.nowPlayingMovies);
 
-	const mainMovie = movies[0];
-	console.log(mainMovie)
+  if (!movies) return;
 
-	const {original_title, overview ,id} = mainMovie;
+  const mainMovie = movies[Math.floor(Math.random() * movies.length)];
+  console.log(mainMovie);
+
+  const { original_title, overview, id } = mainMovie;
 
   return (
     <div>
-				<MainVideoTitle title={original_title} description={overview}/>
-        <MainVideoBackground movieId={id} />
+      <MainVideoTitle title={original_title} description={overview} />
+      <MainVideoBackground movieId={id} />
     </div>
-  )
-}
+  );
+};
 
-export default MainMovieContainer
+export default MainMovieContainer;

@@ -1,39 +1,18 @@
-import { signOut, onAuthStateChanged  } from "firebase/auth"
+import { signOut} from "firebase/auth"
 import ZenFlixLogo from "../assets/ZenFlixLogo.png"
 import { auth } from "../utils/firebase"
-import { useSelector , useDispatch } from "react-redux"
+import { useSelector} from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { useEffect } from 'react'
-import { addUser, removeUser } from '../utils/userSlice';
 import { USER_AVATAR } from "../utils/constants"
+import useOnAuthStateChanged from "../hooks/useOnAuthStateChanged"
 
 
 const Header = () => {
   const user = useSelector((store)=>store.user);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   // OnAuthStatusChanged is like an event listener => we must use useEffect hook and it must run only once.
-  useEffect(()=>{
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user);
-        const {uid , email, displayName} = user;
-        dispatch(addUser({
-          uid,
-          email,
-          displayName
-        }));
-        navigate("/browse");
-      } else {
-        dispatch(removeUser());
-        navigate("/");
-      }
-    });
-
-    return ()=> unsubscribe();
-  },[dispatch, navigate])
-
+  useOnAuthStateChanged();
 
   const handleSignOut = async ()=>{
     try{

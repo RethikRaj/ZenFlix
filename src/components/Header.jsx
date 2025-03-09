@@ -1,15 +1,19 @@
 import { signOut} from "firebase/auth"
 import ZenFlixLogo from "../assets/ZenFlixLogo.png"
 import { auth } from "../utils/firebase"
-import { useSelector} from "react-redux"
+import { useDispatch, useSelector} from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { USER_AVATAR } from "../utils/constants"
 import useOnAuthStateChanged from "../hooks/useOnAuthStateChanged"
+import { toggleOnGptSearchPage } from "../utils/GptSlice"
+import { useEffect } from "react"
 
 
 const Header = () => {
   const user = useSelector((store)=>store.user);
+  const gptSearch = useSelector((store)=>store.gpt.onGptSearchPage);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // OnAuthStatusChanged is like an event listener => we must use useEffect hook and it must run only once.
   useOnAuthStateChanged();
@@ -17,11 +21,23 @@ const Header = () => {
   const handleSignOut = async ()=>{
     try{
       await signOut(auth);
+    // eslint-disable-next-line no-unused-vars
     }catch(error){
-      console.log(error);
       navigate("/error");
     }
   }
+
+  const handleGptSearch = ()=>{
+    dispatch(toggleOnGptSearchPage());
+  }
+
+  useEffect(()=>{
+    if(gptSearch){
+      navigate("gptSearch");
+    }else{
+      navigate("browse");
+    }
+  },[gptSearch,navigate]);
 
   return (
     <div className="flex flex-row justify-between absolute z-20 w-full my-3 px-3">
@@ -30,9 +46,10 @@ const Header = () => {
       </div>
       
       {user && 
-        <div className="flex">
-          <img src={USER_AVATAR} alt="default user avatar" className="rounded-2xl w-12 mx-2"/>
-          <button className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded" onClick={handleSignOut}>Sign Out</button>
+        <div className="flex mt-2">
+          <img src={USER_AVATAR} alt="default user avatar" className="rounded-2xl mx-2 w-10"/>
+          <button to="GPTSearch" className="bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 px-6 rounded mr-2 cursor-pointer" onClick={handleGptSearch}>{gptSearch ? "Browse":"GPT Search"}</button>
+          <button className="bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-6 rounded cursor-pointer" onClick={handleSignOut}>Sign Out</button>
         </div>
       }
       

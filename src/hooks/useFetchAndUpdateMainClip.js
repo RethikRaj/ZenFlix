@@ -8,7 +8,6 @@ const useFetchAndUpdateMainClip = (movieId)=>{
 	const fetchMovieClips = async ()=>{
 		const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, API_OPTIONS)
 		const jsonResponse = await response.json();
-		console.log(jsonResponse);
 
 		const trailers = jsonResponse?.results?.filter((clip)=> clip.type === "Trailer")
 		// if there is no trailer or more than one trailer 

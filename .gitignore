@@ -27,3 +27,4 @@ dist-ssr
 .firebaserc
 /firebase/**  # Only if the folder contains secrets or generated files
 
+.env

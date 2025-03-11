@@ -5,8 +5,9 @@ import { useDispatch, useSelector} from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { USER_AVATAR } from "../utils/constants"
 import useOnAuthStateChanged from "../hooks/useOnAuthStateChanged"
-import { toggleOnGptSearchPage } from "../utils/GptSlice"
+import { clearGptSliceState, toggleOnGptSearchPage } from "../utils/GptSlice"
 import { useEffect } from "react"
+import { clearMoviesState } from "../utils/moviesSlice"
 
 
 const Header = () => {
@@ -21,6 +22,8 @@ const Header = () => {
   const handleSignOut = async ()=>{
     try{
       await signOut(auth);
+      dispatch(clearMoviesState());
+      dispatch(clearGptSliceState());
     // eslint-disable-next-line no-unused-vars
     }catch(error){
       navigate("/error");

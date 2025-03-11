@@ -12,10 +12,16 @@ const GptSlice = createSlice({
         },
         addSuggestedMovies : (state,action)=>{
             state.suggestedMovies = action.payload
+        },
+        clearGptSliceState : ()=>{
+            return {
+                onGptSearchPage : false,
+                suggestedMovies : null
+            }
         }
     }
 })
 
-export const {toggleOnGptSearchPage, addSuggestedMovies} = GptSlice.actions;
+export const {toggleOnGptSearchPage, addSuggestedMovies, clearGptSliceState} = GptSlice.actions;
 
 export default GptSlice.reducer;

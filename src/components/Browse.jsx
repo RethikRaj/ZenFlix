@@ -5,9 +5,9 @@ import SecondaryMoviesContainer from "./SecondaryMoviesContainer";
 
 
 const Browse = () => {
-  useFetchAndUpdateMovies("now_playing", addNowPlayingMovies);
-  useFetchAndUpdateMovies("popular", addPopularMovies);
-  useFetchAndUpdateMovies("top_rated",addTopRatedMovies);
+  useFetchAndUpdateMovies("now_playing", addNowPlayingMovies,"nowPlayingMovies");
+  useFetchAndUpdateMovies("popular", addPopularMovies,"popularMovies");
+  useFetchAndUpdateMovies("top_rated",addTopRatedMovies,"topRatedMovies");
 
   return (
     <div className="bg-black">

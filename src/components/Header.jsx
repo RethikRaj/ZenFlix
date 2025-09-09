@@ -35,12 +35,14 @@ const Header = () => {
   }
 
   useEffect(()=>{
+    if(!user) return;
+
     if(gptSearch){
       navigate("gptSearch");
     }else{
       navigate("browse");
     }
-  },[gptSearch,navigate]);
+  },[gptSearch,navigate, user]);
 
   return (
     <div className="flex flex-row justify-between absolute z-20 w-full my-3 px-3">

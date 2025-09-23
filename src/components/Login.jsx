@@ -17,7 +17,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const toggleSignInAndSignUp = ()=>{
-    if(usernameRef.current !== null) usernameRef.current.value = "";
+    if(usernameRef.current) usernameRef.current.value = "";
     emailRef.current.value = "";
     passwordRef.current.value = "";
     setErrorMessage("");
